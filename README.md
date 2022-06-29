@@ -2,7 +2,7 @@
 
 This repo contains code used to analyse and visualise data collected using NanoSIMS
 
-Five files are needed to intitially process data colleted by the NanoSIMS: read_im_file_ro.m, readNanoSIMSimage.m, read_bytes.m, remove_blanks.m, and wmean.m
+The files needed to intitially process data colleted by the NanoSIMS are in the folder initial processing.
 
 NanoSIMS_Import_Control.m calls the function NanoSIMSImportfunction.m. Together they create excel files for each analysis with counts and standard errors for each cycle, and create plots of counts against cycle number.
 
