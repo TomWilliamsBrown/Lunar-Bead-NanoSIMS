@@ -1,4 +1,4 @@
-%% Multiple Element Plots
+%% Plot all analyses for each individual bead together
 
 close all;
 clear;
