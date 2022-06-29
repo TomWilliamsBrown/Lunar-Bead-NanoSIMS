@@ -1,5 +1,6 @@
 function NanoSIMSExcelFunction(filename, Figure_directoryname, Excel_directoryname, normalise, saveplots, saveexcel)
 % This function exports counts and errors into Excel
+% It also create plots of counts against cycle for each element
 
 
 Figure_directoryname = char(Figure_directoryname);
