@@ -1,7 +1,9 @@
-function NanoSIMSExcelFunction(filename, Figure_directoryname, Excel_directoryname, normalise, saveplots, saveexcel)
+function NanoSIMSImportFunction(filename, Figure_directoryname, Excel_directoryname, normalise, saveplots, saveexcel)
 % This function exports counts and errors into Excel
 % It also create plots of counts against cycle for each element
 
+% Convert to character arrays to allow concantantion with other elements of
+% where the directory/file is for access and saving.
 
 Figure_directoryname = char(Figure_directoryname);
 Excel_directoryname = char(Excel_directoryname);
@@ -10,22 +12,6 @@ filename = char(filename);
 %%
 
 close all;
-
-%{
-doregister = false;
-doroi = 0;
-doplot = 1;
-doqsa = 0;
-donormalizebyse = 1;
-docomparetoother = 0;
-low_prctile_thresh = 5;
-high_prctile_thresh = 95;
-docpsthresh = 0;
-
-rszfac = 2;
-
-removepixelsfromedges = 10;
-%}
 
 %% Get the im file for the sample
 
@@ -86,7 +72,7 @@ Clcount_pixels_interior = zeros(n_interior, ncycles);
 Cucount_pixels_interior = zeros(n_interior, ncycles);
 Brcount_pixels_interior = zeros(n_interior, ncycles);
 Icount_pixels_interior = zeros(n_interior, ncycles);
-ecount_pixels_interior = zeros(n_interior,ncycles);
+ecount_pixels_interior = zeros(n_interior, ncycles);
 
 parfor i = 1:ncycles
 
@@ -104,25 +90,25 @@ parfor i = 1:ncycles
 
     Itemp = Icount_pixels(:, :, i);
     Icount_pixels_interior(:, i) = Itemp(innerpixels);
-    
-    etemp = ecount_pixels(:,:,i);
-    ecount_pixels_interior(:,i) = etemp(innerpixels);
+
+    etemp = ecount_pixels(:, :, i);
+    ecount_pixels_interior(:, i) = etemp(innerpixels);
 
 end
 
 %% Get normalised electron counts
 
 if normalise
-    
-    initial_ecount_pixels_interior = ecount_pixels_interior(:,1);
+
+    initial_ecount_pixels_interior = ecount_pixels_interior(:, 1);
 
     normalised_ecount_pixels_interior = ecount_pixels_interior ./ initial_ecount_pixels_interior;
 
     Fcount_pixels_interior = Fcount_pixels_interior .* normalised_ecount_pixels_interior;
-    Clcount_pixels_interior = Clcount_pixels_interior.* normalised_ecount_pixels_interior;
-    Cucount_pixels_interior = Cucount_pixels_interior.* normalised_ecount_pixels_interior;
-    Brcount_pixels_interior = Brcount_pixels_interior.* normalised_ecount_pixels_interior;
-    Icount_pixels_interior = Icount_pixels_interior.* normalised_ecount_pixels_interior;
+    Clcount_pixels_interior = Clcount_pixels_interior .* normalised_ecount_pixels_interior;
+    Cucount_pixels_interior = Cucount_pixels_interior .* normalised_ecount_pixels_interior;
+    Brcount_pixels_interior = Brcount_pixels_interior .* normalised_ecount_pixels_interior;
+    Icount_pixels_interior = Icount_pixels_interior .* normalised_ecount_pixels_interior;
 
 end
 
@@ -152,9 +138,7 @@ parfor i = 1:ncycles
 
 end
 
-%% Error
-
-%% Cl
+%% Bootstrap to find standard error
 
 %Set the number of trials for bootstrapping error
 ntrials = 1e2;
@@ -168,8 +152,7 @@ I_ = nan(ntrials, ncycles);
 
 nInner = sum(sum(innerpixels)); %Number of inner pixels
 iInner = find(innerpixels); % Creates a vector of the index of all the pixels that are true in R
-% (so not the ones that are zero around the
-% edges)
+% (so not the ones that are zero around the edges)
 
 % Take ntrials repeated samples with replacement from the dataset:
 %This is the slowest part of the code! Speed it up?
@@ -221,16 +204,19 @@ Cu_std = std(Cu_, 1);
 Br_std = std(Br_, 1);
 I_std = std(I_, 1);
 
-%% Plot
+%% Plot scatter plots with errorbars
 
+% Get the name of the bead
 beadlabel = fname(1:end-3);
 beadlabel = replace(beadlabel, '_', '');
 beadlabel = replace(beadlabel, 'LunarBead', 'Lunar Bead ');
 
-set(0, 'DefaultFigureVisible', 'off')
+set(0, 'DefaultFigureVisible', 'off') % Stop plots from popping up on screen
 
 f = figure('Name', ['Element Counts by Cycle: ', beadlabel]);
 f.Position(3:4) = [1200, 600];
+
+% Create a subplot for each of the 5 elements
 
 subplot(2, 3, 1)
 errorplotterfunction(Fbycycle, F_std, '#6699CC', 'F', ncycles, beadlabel)
@@ -243,38 +229,7 @@ errorplotterfunction(Brbycycle, Br_std, '#332288', 'Br', ncycles, beadlabel)
 subplot(2, 3, 5)
 errorplotterfunction(Ibycycle, I_std, '#AA4499', 'I', ncycles, beadlabel)
 
-% Normalised Plots:
-%{
-
-%% Normalise each to one and plot together
-
-Fbycycle_normalised = Fbycycle/max(Fbycycle);
-Clbycycle_normalised = Clbycycle/max(Clbycycle);
-Cubycycle_normalised = Cubycycle/max(Cubycycle);
-Brbycycle_normalised = Brbycycle/max(Brbycycle);
-Ibycycle_normalised = Ibycycle/max(Ibycycle);
-
-%% Plot the normalised results
-
-LineWidth = 1.2;
-
-hold on
-%plot(Fbycycle_normalised)
-plot(Clbycycle_normalised, 'DisplayName', 'Cl', 'Color', '#88CCEE', 'LineWidth', LineWidth)
-plot(Cubycycle_normalised, 'DisplayName', 'Cu', 'Color', '#999933', 'LineWidth', LineWidth)
-plot(Brbycycle_normalised, 'DisplayName', 'Br', 'Color', '#332288', 'LineWidth', LineWidth)
-plot(Ibycycle_normalised,  'DisplayName', 'I', 'Color', '#AA4499' , 'LineWidth', LineWidth)
-hold off
-
-legend('Location', 'best')
-
-title('Normalised Counts for Cl, Cu, Br, and I')
-
-xlabel('Cycle Number')
-ylabel('Counts normalised to Highest Value for Each Element')
-%}
-
-%%
+%% If saveplots is set to 1, the plot will be saved to the plot directory
 
 if saveplots
 
@@ -282,7 +237,7 @@ if saveplots
 
 end
 
-%%
+%% If saveexcel is set to 1, the excel document will be saved to the excel directory
 
 if saveexcel
 
