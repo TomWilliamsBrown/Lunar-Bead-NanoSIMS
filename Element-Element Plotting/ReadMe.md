@@ -1,6 +1,6 @@
 # Element-Element Plotting
 
-This folder contains codes to plot figures with an element on the x- and y- axis (element-element plots), as well as the resulting figures.
+This folder contains codes to plot figures with an element on each axis (element-element plots), as well as the resulting figures.
 
 To create element-element plots for each individual analysis, use Element-ElementPlot_Control.m and ElementElementPlotterFunction.m. Parameters 
 (e.g. the excel files to be read, where figures are to be saved) are altered in Element-ElementPlot_Control.m, and this is the only code that should
