@@ -13,7 +13,8 @@ filename = char(filename);
 
 close all;
 
-%% Get the im file for the sample
+%% Read the NanoSIMS Image
+%--------------------------------------------------------------------------
 
 % Specify the sample you want:
 
@@ -25,19 +26,22 @@ fname = fnames{1};
 filefindernames = {['im files/', fname]};
 filefindername = filefindernames{1};
 
-%%
-
 [~, fname_] = fileparts(fname);
 
-%This line calls read_im_file_ro:
-[image_data, ~, ~] = read_im_file_ro(filefindername);
-
-%This line calls readNanoSIMSimage:
+% This line calls readNanoSIMSimage to get the header data
+% (e.g. mass names, masses, analysis times, etc.)
 [~, header_data] = readNanoSIMSimage(filefindername);
 
-%%
-[F_index, Cl_index, Cu_index, Br_index, I_index, e_index] = deal(1, 2, 3, 4, 5, 6);
+% This line calls read_im_file_ro to get the image data.
+% i.e. the counts in every pixel in every cycle for all of the masses
+% analysed
+[image_data, ~, ~] = read_im_file_ro(filefindername);
+
+%% Generate variables from the data and headers read above
+%--------------------------------------------------------------------------
+
 %mass_amu: {[18.9708]  [36.9949]  [63.0276]  [79.0000]  [127.0000]  [0]}
+[F_index, Cl_index, Cu_index, Br_index, I_index, e_index] = deal(1, 2, 3, 4, 5, 6);
 
 % Get Counting Times
 countingtimes = cell2mat(header_data.Tab_mass.countingtime);
@@ -46,15 +50,7 @@ countingtimes = cell2mat(header_data.Tab_mass.countingtime);
 n_pixels = header_data(1).Header_image.width;
 ncycles = size(image_data, 3);
 
-%% Remove 5 pixels around the margin
-
-marginpixels = 5;
-
-innerpixels = false(n_pixels, n_pixels); %Creates logical array size of the image, filled with 0
-innervalues = true(n_pixels-marginpixels*2, n_pixels-marginpixels*2); %The inner values that we want are 1s
-innerpixels((marginpixels + 1):(end -marginpixels), (marginpixels + 1):(end -marginpixels)) = innervalues;
-
-%% Get counts for each pixel in a 256x256 image over all cycles (1x3 matrix)
+% Get counts for each pixel in a 256x256 image over all cycles (256x256x50 matrix)
 
 Fcount_pixels = image_data(:, :, :, F_index);
 Clcount_pixels = image_data(:, :, :, Cl_index);
@@ -63,10 +59,17 @@ Brcount_pixels = image_data(:, :, :, Br_index);
 Icount_pixels = image_data(:, :, :, I_index);
 ecount_pixels = image_data(:, :, :, e_index);
 
-%% Remove exterior pixels
+%% Remove 5 pixels around the margin
+%--------------------------------------------------------------------------
 
+marginpixels = 5;
+
+innerpixels = false(n_pixels, n_pixels); %Creates logical array size of the image, filled with 0
+innervalues = true(n_pixels-marginpixels*2, n_pixels-marginpixels*2); %The inner values that we want are 1s
+innerpixels((marginpixels + 1):(end -marginpixels), (marginpixels + 1):(end -marginpixels)) = innervalues;
+
+% Preallocate a matrix for the pixels that are not removed
 n_interior = (256 - 2 * marginpixels)^2;
-
 Fcount_pixels_interior = zeros(n_interior, ncycles);
 Clcount_pixels_interior = zeros(n_interior, ncycles);
 Cucount_pixels_interior = zeros(n_interior, ncycles);
@@ -97,6 +100,7 @@ parfor i = 1:ncycles
 end
 
 %% Get normalised electron counts
+%--------------------------------------------------------------------------
 
 if normalise
 
@@ -112,7 +116,8 @@ if normalise
 
 end
 
-%% Sum pixels across all cycles for a count of element in each cycle
+%% Sum pixels across all cycles for a count of each element in each cycle
+%--------------------------------------------------------------------------
 
 Fsum = sum(Fcount_pixels_interior);
 Clsum = sum(Clcount_pixels_interior);
@@ -121,6 +126,7 @@ Brsum = sum(Brcount_pixels_interior);
 Isum = sum(Icount_pixels_interior);
 
 %% Get the sum of counts for each cycle
+%--------------------------------------------------------------------------
 
 Fbycycle = zeros(1, ncycles);
 Clbycycle = zeros(1, ncycles);
@@ -139,6 +145,7 @@ parfor i = 1:ncycles
 end
 
 %% Bootstrap to find standard error
+%--------------------------------------------------------------------------
 
 %Set the number of trials for bootstrapping error
 ntrials = 1e2;
@@ -205,6 +212,7 @@ Br_std = std(Br_, 1);
 I_std = std(I_, 1);
 
 %% Plot scatter plots with errorbars
+%--------------------------------------------------------------------------
 
 % Get the name of the bead
 beadlabel = fname(1:end-3);
@@ -229,7 +237,9 @@ errorplotterfunction(Brbycycle, Br_std, '#332288', 'Br', ncycles, beadlabel)
 subplot(2, 3, 5)
 errorplotterfunction(Ibycycle, I_std, '#AA4499', 'I', ncycles, beadlabel)
 
-%% If saveplots is set to 1, the plot will be saved to the plot directory
+%% Save the figure
+% If saveplots is set to 1, the plot will be saved to the plot directory
+%--------------------------------------------------------------------------
 
 if saveplots
 
@@ -237,7 +247,9 @@ if saveplots
 
 end
 
-%% If saveexcel is set to 1, the excel document will be saved to the excel directory
+%% Save the excel document
+% If saveexcel is set to 1, the excel document will be saved to the excel directory
+%--------------------------------------------------------------------------
 
 if saveexcel
 
