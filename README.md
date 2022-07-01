@@ -18,7 +18,11 @@ The files in Import-and-Cycle-Plotting are used to present the data in a readabl
 
 The files in Element-Element Plotting create figures where a different element is plotted on each axis.
 
-### 4. [Plotting Functions](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Plotting_Functions)
+### 4. [Movies](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Count_Movies)
+
+This is used to create movies of counts over time, to show spatial and temporal changes in counts.
+
+### 5. [Plotting Functions](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Plotting_Functions)
 
 The files in Plotting Functions are called by the other scripts, and used to create consistent plots.
 
