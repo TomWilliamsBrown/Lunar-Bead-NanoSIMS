@@ -4,6 +4,14 @@
 
 This repo contains the code I use to extract and visualise data collected using the Cameca NanoSIMS 50L. If you have any questions or comments, please contact me at [Thomas_Williams@Brown.edu](mailto:Thomas_Williams@Brown.edu).
 
+## To Do:
+
+* Work on movie plotting
+  * Change the saved movie name to be based on the .im file being processed
+  * Turn CountMovies into a function, then call it for each .im file
+* Define Regions of Interest (ROIs)
+  * What to base this on? Can I do it using the movies? Maybe stacked heatmaps?
+
 ## Sections
 
 ### 1. [Initial Processing](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Initial_Processing)
