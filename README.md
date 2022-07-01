@@ -12,15 +12,15 @@ This repo contains the code I use to extract and visualise data collected using 
 
 The files needed to intitially process data colleted by the NanoSIMS are in the folder initial processing.
 
-### 2. Data Extraction, and Cycle-Element Plots
+### 2. [Data Extraction, and Cycle-Element Plots](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Import-and-Cyle-Plotting)
 
 The files in Import-and-Cycle-Plotting are used to present the data in a readable format, and save it into excel. They also create plots of element counts on the y-axis against cycle number on the x-axis.
 
-### 3. Element-Element Plots
+### 3. [Element-Element Plots](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Element-Element%20Plotting)
 
 The files in Element-Element Plotting create figures where a different element is plotted on each axis.
 
-### 4. Plotting Functions
+### 4. [Plotting Functions](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Plotting_Functions)
 
 The files in Plotting Functions are called by the other scripts, and used to create consistent plots.
 
