@@ -2,13 +2,13 @@
 
 ## CLONE THE REPO [HERE](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS.git)
 
-## author: Tom Williams
+## Author: Tom Williams
 
 This repo contains the code I use to extract and visualise data collected using the Cameca NanoSIMS 50L
 
 ## Sections
 
-### 1. Initial Processing
+### 1. [Initial Processing](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Initial_Processing)
 
 The files needed to intitially process data colleted by the NanoSIMS are in the folder initial processing.
 
