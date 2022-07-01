@@ -1,4 +1,4 @@
-# Read Me
+# Element-Element Plotting
 
 This folder contains codes to plot figures with an element on the x- and y- axis (element-element plots), as well as the resulting figures.
 
