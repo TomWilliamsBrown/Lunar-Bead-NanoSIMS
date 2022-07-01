@@ -2,12 +2,26 @@
 
 ## CLONE THE REPO [HERE](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS.git)
 
-This repo contains code used to analyse and visualise data collected using NanoSIMS
+## author: Tom Williams
+
+This repo contains the code I use to extract and visualise data collected using the Cameca NanoSIMS 50L
+
+## Sections
+
+### 1. Initial Processing
 
 The files needed to intitially process data colleted by the NanoSIMS are in the folder initial processing.
 
+### 2. Data Extraction, and Cycle-Element Plots
+
 The files in Import-and-Cycle-Plotting are used to present the data in a readable format, and save it into excel. They also create plots of element counts on the y-axis against cycle number on the x-axis.
+
+### 3. Element-Element Plots
 
 The files in Element-Element Plotting create figures where a different element is plotted on each axis.
 
+### 4. Plotting Functions
+
 The files in Plotting Functions are called by the other scripts, and used to create consistent plots.
+
+
