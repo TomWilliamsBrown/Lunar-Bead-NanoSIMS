@@ -4,7 +4,7 @@ These matlab scripts are used primarily to extract data from the NanoSIMS into a
 They also create plots of counts against cycle number.
 
 NanoSIMS_Import_Control.m and NanoSIMSImportFunction.m extract the data from .im files produced by the Cameca NanoSIMS 50L. They then process it, and save 
-the counts by cycle, and standard errors by cycle, for each individual element. These are saved as .xlsx files for readability. 
+the counts by cycle, and standard errors by cycle, for each individual element. These are saved as .xlsx files for readability (normalised by electron counts in Excel Files electron). 
 
 They also contain an option to plot the counts against cycle for each individual site analysed ('cycle-element figures'). The resulting figures are saved 
 in 'Individual Cycle-Element Figures'.
