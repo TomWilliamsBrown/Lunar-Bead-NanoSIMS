@@ -1,5 +1,7 @@
 # Lunar-Bead-NanoSIMS
 
+## CLONE THE REPO [HERE](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS.git)
+
 This repo contains code used to analyse and visualise data collected using NanoSIMS
 
 The files needed to intitially process data colleted by the NanoSIMS are in the folder initial processing.
