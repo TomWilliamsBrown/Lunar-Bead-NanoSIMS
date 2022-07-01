@@ -1,11 +1,8 @@
 # Lunar-Bead-NanoSIMS
 
-## CLONE THE REPO [HERE](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS.git)
-
 ## Author: Tom Williams
-##### Contact: Thomas_Williams@Brown.edu
 
-This repo contains the code I use to extract and visualise data collected using the Cameca NanoSIMS 50L
+This repo contains the code I use to extract and visualise data collected using the Cameca NanoSIMS 50L. If you have any questions or comments, please contact me at [Thomas_Williams@Brown.edu](mailto:Thomas_Williams@Brown.edu).
 
 ## Sections
 
