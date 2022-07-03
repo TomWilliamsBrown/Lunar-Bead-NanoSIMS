@@ -8,6 +8,10 @@ close all;
 % [1] Specify the .im files you want
 filename = {'LunarBeadI_1.im'};
 
+% [2] Specify where you want the movies saved
+
+moviesavefolder = 'Movies';
+
 
 
 
@@ -72,12 +76,40 @@ Clpixels = im2uint8(Clcount_pixels) * 100;
 Cupixels = im2uint8(Cucount_pixels*10000);
 epixels = im2uint8(ecount_pixels*100);
 
-%% Create the movie
+%% Make movie folder
 %--------------------------------------------------------------------------
 
+% Check if the directory already exists
+% If it does, ask if you want to delete the contents.
+% If yes, delete the contents
+
+if isfolder(moviesavefolder)
+
+    % If the folder exists, tell the user. Continue if any key is pressed.
+    prompt = (['The following folder already exists: ', moviesavefolder, '\n', 'Press any key to continue and delete contents']);
+    input(prompt)
+
+    % Delete contents if it already exists
+
+    % Get a list of all files in the folder
+    filePattern = fullfile(char(moviesavefolder));
+    % Then delete the ones with a .png extension:
+    delete([filePattern, '/*.mp4'])
+    % Say that they've been deleted
+    fprintf('Files Deleted. Starting figure creation. \n')
+
+else % If it doesn't already exist, make it!
+
+    [status, msg, msgID] = mkdir(char(moviesavefolder));
+
+end
+
+
+%% Create and save the movie
+%--------------------------------------------------------------------------
 
 % Create VideoWriter Object (VwObj) to write video files
-VwObj = VideoWriter('realtrialdata', 'MPEG-4');
+VwObj = VideoWriter([moviesavefolder, '/', extractBefore(fname,'.im'), '_movie'], 'MPEG-4');
 % modify property values before opening the video file for writing
 VwObj.FrameRate = 15;
 VwObj.Quality = 95;
@@ -94,5 +126,4 @@ for t = 1:size(Cupixels, 3)
 end
 close(VwObj);
 
-%% Save the movie
-%--------------------------------------------------------------------------
+
