@@ -7,7 +7,6 @@ This repo contains the code I use to extract and visualise data collected using 
 ## To Do:
 
 * Work on movie plotting
-  * Turn CountMovies into a function, then call it for each .im file
   * Add scalebar
 * Define Regions of Interest (ROIs)
   * What to base this on? Can I do it using the movies? Maybe stacked heatmaps?
