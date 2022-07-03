@@ -7,7 +7,6 @@ This repo contains the code I use to extract and visualise data collected using 
 ## To Do:
 
 * Work on movie plotting
-  * Change the saved movie name to be based on the .im file being processed
   * Turn CountMovies into a function, then call it for each .im file
   * Add scalebar
 * Define Regions of Interest (ROIs)
