@@ -11,6 +11,7 @@ This repo contains the code I use to extract and visualise data collected using 
   * Turn CountMovies into a function, then call it for each .im file
 * Define Regions of Interest (ROIs)
   * What to base this on? Can I do it using the movies? Maybe stacked heatmaps?
+* Label every x points (maybe 5?)
 
 ## Sections
 
