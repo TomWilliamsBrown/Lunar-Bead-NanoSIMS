@@ -10,7 +10,7 @@ This repo contains the code I use to extract and visualise data collected using 
   * Add scalebar
 * Define Regions of Interest (ROIs)
   * What to base this on? Can I do it using the movies? Maybe stacked heatmaps?
-* Label every x points (maybe 5?)
+* Label every x points - see test in everyxlabel
 
 ## Sections
 
