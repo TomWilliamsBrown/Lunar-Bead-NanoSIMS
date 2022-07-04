@@ -9,11 +9,11 @@ clear;
 
 % [1] Choose which elements you want on the x axis:
 % Total possible = {'F','Cl','Cu','Br','I'}
-xaxiselements = {'Cl', 'F', 'Cu', 'Br', 'I'};
-%xaxiselements = {'Cl'};
+% xaxiselements = {'Cl', 'F', 'Cu', 'Br', 'I'};
+xaxiselements = {'Cl'};
 
 % [2] Where the excel files with the count data are saved:
-directoryname = {'Cs Beam Excel Files electron'};
+directoryname = {'Excel Files electron'};
 
 % [3] Which excel file(s) are to be used:
 % Must be in format 'LunarBead[beadletter]_[analysisnumber]'
@@ -22,7 +22,7 @@ Excel_files = {'LunarBeadE_1', ...
     'LunarBeadH_1', 'LunarBeadH_2', 'LunarBeadH_3', 'LunarBeadH_4', ...
     'LunarBeadI_1', 'LunarBeadI_2', 'LunarBeadI_3', ...
     'LunarBeadJ_1', 'LunarBeadJ_2', 'LunarBeadJ_3'};
-%Excel_files = {'LunarBeadI_1', 'LunarBeadI_2', 'LunarBeadI_3'};
+% Excel_files = {'LunarBeadI_1', 'LunarBeadI_2', 'LunarBeadI_3'};
 
 % [4] Where to save the results:
 elementelementdirectoryname = {'Whole Bead Element Element Plots'};
@@ -183,6 +183,11 @@ rainbowcolours = colormap;
 rainbow_dividing_interval = round(linspace(1, length(rainbowcolours), num_rows/numfiles));
 rainbowcolours = rainbowcolours(rainbow_dividing_interval, :); % Only include every few rows
 
+%% Make the Marker
+
+marker = char({'.' 'x' '^' '+'});
+
+
 set(0, 'DefaultFigureVisible', 'off') % Stop plots from popping up on screen
 
 %% Try replacing for loop where errorbar is created every point, to slicing the table into each site, and plot
@@ -192,7 +197,7 @@ figure('Name', ['Bead ', beadname])
 for i = 1:4
 
     subplot(2, 2, i)
-    coloursubplotter(numfiles, num_rows, xaxis, xaxiserror, xaxiselement, yaxis(:, i), yaxiserror(:, i), yaxiselement(i), rainbowcolours);
+    coloursubplotter(numfiles, num_rows, xaxis, xaxiserror, xaxiselement, yaxis(:, i), yaxiserror(:, i), yaxiselement(i), rainbowcolours, marker);
 
 end
 
@@ -214,7 +219,7 @@ end
 
 end
 
-function coloursubplotter(numfiles, num_rows, xaxis, xaxiserror, xaxiselement, yaxis, yaxiserror, yaxiselement, colourmap)
+function coloursubplotter(numfiles, num_rows, xaxis, xaxiserror, xaxiselement, yaxis, yaxiserror, yaxiselement, colourmap, marker)
 
 yaxiselement = char(yaxiselement);
 
@@ -228,11 +233,26 @@ for j = 1:numfiles
         if (yaxis(i) - yaxiserror(i)) > 0.1 && (xaxis(i) - xaxiserror(i)) > 0.1
             % Some errorbars go very close to zero. Cutting these out so
             % that the log plot doesn't look bad. IS THIS OK TO DO?
-            e = errorbar(xaxis(i), yaxis(i), yaxiserror(i), yaxiserror(i), xaxiserror(i), xaxiserror(i), '.', 'Color', colourmap(colourcount, :));
+            e = errorbar(xaxis(i), yaxis(i), yaxiserror(i), yaxiserror(i), xaxiserror(i), xaxiserror(i), marker(j), 'Color', colourmap(colourcount, :));
             set(get(e, 'Parent'), 'YScale', 'log')
             set(get(e, 'Parent'), 'XScale', 'log')
         end
+
     end
+    
+%% Numbering Points
+    
+%         numberpoint = 1:50;
+%         numberpoint2 = repmat(numberpoint,1,3);
+%         
+%         lengthnum = numel(numberpoint2);
+%         iteratedlabels = 1:7:lengthnum;
+%         
+%         numbereveryn = numberpoint2(1, iteratedlabels);
+%         xaxiseveryn = xaxis(iteratedlabels, 1); % Only include every few rows
+%         yaxiseveryn = yaxis(iteratedlabels, 1); % Only include every few rows
+%         
+%         labelpoints(xaxiseveryn, yaxiseveryn, numbereveryn);
 
 end
 
