@@ -35,7 +35,10 @@ SavePlots_YN = 1;
 %%%%% Don't routinely alter anything below this line!
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Check if the directory already exists
+%% Create a folder to save the figures in
+%--------------------------------------------------------------------------
+
+% Check if the directory already exists
 % If it does, ask if you want to delete the contents.
 % If yes, delete the contents
 
@@ -60,13 +63,14 @@ else %If it doesn't already exist, make it!:
 end
 
 %%%%% Get the beads
+%--------------------------------------------------------------------------
 
 beads_by_site = extractBetween(Excel_files, 'Bead', '_');
 uniquebeads = unique(beads_by_site);
 
-%%%%%%%%%%%%% Turn this into a for loop for all the excel files
 
 %% Join all excel files
+%--------------------------------------------------------------------------
 
 for beadnumber = 1:numel(uniquebeads)
 
@@ -102,10 +106,15 @@ end
 
 set(0, 'DefaultFigureVisible', 'on') % Allow plots to pop up on screen again
 
+%% Function for plotting
+%--------------------------------------------------------------------------
+
 function elementelementplots(T, elementelementdirectoryname, beadname, SavePlots_YN, xaxiselement, numfiles)
 %When called, this function actually produces each individual element-element plot
 
 %% Here we control what gets plotted on the x and y axis
+%--------------------------------------------------------------------------
+
 yaxis = [T.F_counts, T.Cl_counts, T.Cu_counts, T.Br_counts, T.I_counts];
 yaxiserror = [T.F_std, T.Cl_std, T.Cu_std, T.Br_std, T.I_std];
 yaxiselement = {'F', 'Cl', 'Cu', 'Br', 'I'};
@@ -184,14 +193,19 @@ rainbow_dividing_interval = round(linspace(1, length(rainbowcolours), num_rows/n
 rainbowcolours = rainbowcolours(rainbow_dividing_interval, :); % Only include every few rows
 
 %% Make the Marker
+%--------------------------------------------------------------------------
 
 marker = char({'.' 'x' '^' '+'});
 
 
 set(0, 'DefaultFigureVisible', 'off') % Stop plots from popping up on screen
 
-%% Try replacing for loop where errorbar is created every point, to slicing the table into each site, and plot
-% them seperately - should be a few plots, instead of a few hundred!
+%% Plot the figure
+%--------------------------------------------------------------------------
+
+% Create the figure, then for each site on the bead, plot the
+% element-element plot.
+
 figure('Name', ['Bead ', beadname])
 
 for i = 1:4
@@ -202,6 +216,7 @@ for i = 1:4
 end
 
 %% Resize Figures
+%--------------------------------------------------------------------------
 
 colours = gcf;
 colours.Position(3:4) = [1000, 500];
@@ -209,6 +224,7 @@ colours.Position(3:4) = [1000, 500];
 % shg % Show Figure
 
 %% Save Plots
+%--------------------------------------------------------------------------
 
 if SavePlots_YN
 
@@ -218,6 +234,9 @@ end
 
 
 end
+
+%% Function for the actual plotting
+%--------------------------------------------------------------------------
 
 function coloursubplotter(numfiles, num_rows, xaxis, xaxiserror, xaxiselement, yaxis, yaxiserror, yaxiselement, colourmap, marker)
 
@@ -240,8 +259,6 @@ for j = 1:numfiles
 
     end
     
-%% Numbering Points
-    
 %         numberpoint = 1:50;
 %         numberpoint2 = repmat(numberpoint,1,3);
 %         
@@ -255,6 +272,8 @@ for j = 1:numfiles
 %         labelpoints(xaxiseveryn, yaxiseveryn, numbereveryn);
 
 end
+
+% Label the axes
 
 hold off
 xlabel([xaxiselement, ' Counts'])
