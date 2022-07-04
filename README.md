@@ -11,8 +11,9 @@ This repo contains the code I use to extract and visualise data collected using 
 * Define Regions of Interest (ROIs)
   * What to base this on? Can I do it using the movies? Maybe stacked heatmaps?
 * In the whole bead element-element plots, distinguish the points and beads
-  * Attempted labelling, but looks messy and confusing - there may be a better way.
-  * Have added a different marker for each site. Now create a legend with these in.
+  * Attempted labelling, but looks messy and confusing - there may be a better way?
+  * Added a legend with the markers. 
+  * Need to find a way to show progression. Change the colour bar? Add an arrow?
 
 ## Sections
 
