@@ -68,7 +68,6 @@ end
 beads_by_site = extractBetween(Excel_files, 'Bead', '_');
 uniquebeads = unique(beads_by_site);
 
-
 %% Join all excel files
 %--------------------------------------------------------------------------
 
@@ -195,10 +194,11 @@ rainbowcolours = rainbowcolours(rainbow_dividing_interval, :); % Only include ev
 %% Make the Marker
 %--------------------------------------------------------------------------
 
-marker = char({'.' 'x' '^' '+'});
+marker = char({'.', 'x', '^', '+'});
 
 
 set(0, 'DefaultFigureVisible', 'off') % Stop plots from popping up on screen
+set(0, 'defaultLegendAutoUpdate', 'off'); %Stop legend auto updating
 
 %% Plot the figure
 %--------------------------------------------------------------------------
@@ -208,10 +208,16 @@ set(0, 'DefaultFigureVisible', 'off') % Stop plots from popping up on screen
 
 figure('Name', ['Bead ', beadname])
 
+fig = figure;
+set(fig, 'defaultLegendAutoUpdate', 'off'); %Stop legend auto updating
+plotlegend = 1;
+
 for i = 1:4
 
     subplot(2, 2, i)
-    coloursubplotter(numfiles, num_rows, xaxis, xaxiserror, xaxiselement, yaxis(:, i), yaxiserror(:, i), yaxiselement(i), rainbowcolours, marker);
+    coloursubplotter(numfiles, num_rows, xaxis, xaxiserror, xaxiselement, yaxis(:, i), yaxiserror(:, i), yaxiselement(i), rainbowcolours, marker, plotlegend);
+
+    plotlegend = 0;
 
 end
 
@@ -238,12 +244,12 @@ end
 %% Function for the actual plotting
 %--------------------------------------------------------------------------
 
-function coloursubplotter(numfiles, num_rows, xaxis, xaxiserror, xaxiselement, yaxis, yaxiserror, yaxiselement, colourmap, marker)
+function coloursubplotter(numfiles, num_rows, xaxis, xaxiserror, xaxiselement, yaxis, yaxiserror, yaxiselement, colourmap, marker, plotlegend)
 
 yaxiselement = char(yaxiselement);
 
 hold on
-
+legend('AutoUpdate', 'off');
 for j = 1:numfiles
 
     colourcount = 0;
@@ -253,30 +259,54 @@ for j = 1:numfiles
             % Some errorbars go very close to zero. Cutting these out so
             % that the log plot doesn't look bad. IS THIS OK TO DO?
             e = errorbar(xaxis(i), yaxis(i), yaxiserror(i), yaxiserror(i), xaxiserror(i), xaxiserror(i), marker(j), 'Color', colourmap(colourcount, :));
+            % Make the axes log-log
             set(get(e, 'Parent'), 'YScale', 'log')
             set(get(e, 'Parent'), 'XScale', 'log')
         end
 
     end
-    
-%         numberpoint = 1:50;
-%         numberpoint2 = repmat(numberpoint,1,3);
-%         
-%         lengthnum = numel(numberpoint2);
-%         iteratedlabels = 1:7:lengthnum;
-%         
-%         numbereveryn = numberpoint2(1, iteratedlabels);
-%         xaxiseveryn = xaxis(iteratedlabels, 1); % Only include every few rows
-%         yaxiseveryn = yaxis(iteratedlabels, 1); % Only include every few rows
-%         
-%         labelpoints(xaxiseveryn, yaxiseveryn, numbereveryn);
+
+    %         numberpoint = 1:50;
+    %         numberpoint2 = repmat(numberpoint,1,3);
+    %
+    %         lengthnum = numel(numberpoint2);
+    %         iteratedlabels = 1:7:lengthnum;
+    %
+    %         numbereveryn = numberpoint2(1, iteratedlabels);
+    %         xaxiseveryn = xaxis(iteratedlabels, 1); % Only include every few rows
+    %         yaxiseveryn = yaxis(iteratedlabels, 1); % Only include every few rows
+    %
+    %         labelpoints(xaxiseveryn, yaxiseveryn, numbereveryn);
 
 end
 
-% Label the axes
+%% Add a legend
+%--------------------------------------------------------------------------
+
+% This is a bit of a bodge job. Added invisible plots, but given them a
+% display name that appears in the legend.
+
+if plotlegend % Only creates a legend if it's the first subplot
+
+    legend('AutoUpdate', 'on');
+    nanaxes = nan(1, numfiles);
+    for n = 1:numfiles
+        p = plot(nanaxes, nanaxes, marker(n));
+        p.DisplayName = ['Site: ', num2str(n)];
+        p.Color = 'k';
+    end
+
+end
+
+legend('Location', 'best');
+legend boxoff;
+
+%% Label the axes
+%--------------------------------------------------------------------------
 
 hold off
 xlabel([xaxiselement, ' Counts'])
 ylabel([yaxiselement, ' Counts'])
+
 
 end
