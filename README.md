@@ -10,10 +10,12 @@ This repo contains the code I use to extract and visualise data collected using 
   * Add scalebar
 * Define Regions of Interest (ROIs)
   * What to base this on? Can I do it using the movies? Maybe stacked heatmaps?
+  * Select on an image, create ROIs. Do this for the individual chunks. Try on a couple of pieces first.
 * In the whole bead element-element plots, distinguish the points and beads
   * Attempted labelling, but looks messy and confusing - there may be a better way?
   * Added a legend with the markers. 
   * Need to find a way to show progression. Change the colour bar? Add an arrow?
+
 
 ## Sections
 
