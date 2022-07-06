@@ -10,7 +10,9 @@ This repo contains the code I use to extract and visualise data collected using 
   * __Add scalebar__ Need this to better decide heatmaps and ROIs!
 * Define Regions of Interest (ROIs)
   * Save ROI counts and stds to excel file
+  * Expand to all the elements
   * Tidy this and comment
+  * Annotated plots? Show the area and a plot next to it.
 * In the whole bead element-element plots, distinguish the points and beads
   * Attempted labelling, but looks messy and confusing - there may be a better way?
   * Need to find a way to show progression. Change the colour bar? Add an arrow?
