@@ -1,0 +1,73 @@
+close all
+clear
+set(groot, 'DefaultFigureVisible', 'on')
+
+%% Get background image
+
+%%
+
+x = []; % This will store screw x coords
+y = [];
+
+minxy = 0;
+maxxy = 256;
+
+%% Keep asking for more points until you don't want any more
+loopcount = 0;
+while true
+    
+    %% Ask for input, or instructions for first go round
+    % --------------------------------------------------------------------- 
+    if loopcount
+        
+    loop = input('Continue? (1/0) : '); % 1 to continue 0 to break loop
+    
+    else
+        fprintf(['Click to add a point on the outside of the area you want. \n' , ...
+            'Press enter when done adding as many as you want. \n', ...
+            'You','''','ll then be asked if you want to add more points \n', ...
+            'This time, you','''','ll be able to see your previous points \n', ...
+            'You can keep doing this as much as you want \n'])
+                 
+        loop = 1;
+    end
+    
+    %%
+    % ---------------------------------------------------------------------
+    
+    if loop == 1        
+        plot(x, y, '.r')
+        ylim([minxy maxxy]);
+        xlim([minxy maxxy]);
+        hold on
+        [xtemp,ytemp] = ginput;
+        
+        hold off
+        
+    else
+        break
+    end
+    
+    x = [x;xtemp];
+    y = [y;ytemp];
+    
+    loopcount = 1;
+end
+
+%% Now test only including data within the plot
+% -------------------------------------------------------------------------
+
+% Create a mesh of all points (simulating the pixels)
+[Xmesh, Ymesh] = meshgrid(minxy:maxxy);
+% Find if pixels are inside the drawn polygon
+[in,on] = inpolygon(Xmesh,Ymesh,x,y);
+hold on
+plot(Xmesh(in),Ymesh(in),'r+') % Plot pixels in the polygon in red
+plot(Xmesh(~in),Ymesh(~in),'b+') % Plot pixels outside the polygon in blue
+hold off
+
+%% Now do maths on points inside the polygon
+% -------------------------------------------------------------------------
+
+numberofinteriorpoints = sum(Xmesh(in));
+
