@@ -7,11 +7,10 @@ This repo contains the code I use to extract and visualise data collected using 
 ## To Do:
 
 * Work on movie plotting
-  * Add scalebar
+  * __Add scalebar__ Need this to better decide heatmaps and ROIs!
 * Define Regions of Interest (ROIs)
-  * What to base this on? Can I do it using the movies? Maybe stacked heatmaps?
-  * Select on an image, create ROIs. Do this for the individual chunks. Try on a couple of pieces first.
-  * Export ROI vertex points to a text file, so that you only have to select the ROI once.
+  * Save ROI counts and stds to excel file
+  * Tidy this and comment
 * In the whole bead element-element plots, distinguish the points and beads
   * Attempted labelling, but looks messy and confusing - there may be a better way?
   * Added a legend with the markers. 
