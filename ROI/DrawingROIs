@@ -2,19 +2,22 @@
 clear;
 close all;
 
+%% Get background image.
+% This will be a NanoSIMS image
+
+file = 'LunarBeadH_1.png';
+
+I = imread(['FirstFrame/', file]);
+
+
 %% Name of file to save
 
-textfile = 'CatVertices.txt';
+textfile = [extractBefore(file, '.png'), '.txt'];
 
 %% Type of shape
 
 % Freehand = 1, Circle = 2, ellipse = 3, Polygon = 4
 drawtype = 1;
-
-%% Get background image.
-% This will be a NanoSIMS image
-
-I = imread('cat.png');
 
 % Get the number of pixels (will be 256x256 for the NanoSIMS images)
 maxy = size(I, 1);
@@ -24,20 +27,13 @@ stopdrawing = 0;
 
 while ~stopdrawing
     
-    if stopdrawing == 'x'
-        break;
-    end
+    
 
 %%
 
 imshow(I);
 
-fig = gcf;
-fig.Units = 'pixels';
-fig.Position(3:4) = [500, 500];
-g = gca;
-g.Units = 'pixels';
-g.Position = [0, 0, 500, 500];
+figsizer(gcf, gca)
 
 if drawtype == 1
     hold on
@@ -66,8 +62,8 @@ end
 
 position = h.Position;
 
-y = flip(position(:,2),1);
-x = flip(position(:,1),1);
+Y = flip(position(:,2),1);
+X = flip(position(:,1),1);
 
 %%
 close all
@@ -81,20 +77,20 @@ close all
 
 if drawtype == 2
     theta=linspace(0,2*pi,200);
-    x=radius*cos(theta) + x;
-    y=radius*sin(theta) + y;
+    X=radius*cos(theta) + X;
+    Y=radius*sin(theta) + Y;
     
 elseif drawtype == 3
     theta=linspace(0,2*pi,200);
-    x=semiaxes(2)*cos(theta) + x;
-    y=semiaxes(1)*sin(theta) + y;
+    X=semiaxes(2)*cos(theta) + X;
+    Y=semiaxes(1)*sin(theta) + Y;
     
 end
 
 % Create a mesh of all points (simulating the pixels)
 [Xmesh, Ymesh] = meshgrid(0:maxx, 0:maxy);
 % Find if pixels are inside the drawn polygon
-[in, on] = inpolygon(Xmesh, Ymesh, x, y);
+[in, on] = inpolygon(Xmesh, Ymesh, X, Y);
 %%
 
 figure()
@@ -102,34 +98,43 @@ hold on
 imshow(I)
 hold on
 
-fig = gcf;
-fig.Units = 'pixels';
-fig.Position(3:4) = [500, 500];
-g = gca;
-g.Units = 'pixels';
-g.Position = [0, 0, 500, 500];
-
-        
+figsizer(gcf, gca)
+   
 hold on
 plot(Xmesh(in), Ymesh(in), 'r+') % Plot pixels in the polygon in red
-plot(Xmesh(~in), Ymesh(~in), 'b+') % Plot pixels outside the polygon in blue
+%plot(Xmesh(~in), Ymesh(~in), 'b+') % Plot pixels outside the polygon in blue
 
 
-stopdrawing = input('Happy with these points? (1/0/x): '); % 1 to continue 0 to break loop
+stopdrawing = input('Happy with these points? (1/0): '); % 1 to continue 0 to break loop
+
+
 
 close all
+
 end
 
 savepoints = 0;
-if stopdrawing == 'x'
+if stopdrawing ~= 'x'
 savepoints = input('Save these points? (1/0): ');
+
+    if savepoints
+
+        vertices = table(X, Y);
+        writetable(vertices, textfile);
+
+    end
 end
 
-if savepoints
-    
-    vertices = table(x, y);
-    writetable(vertices, textfile);
-    
-end
+fprintf('Done! \n')
 
-fprintf('Done!')
+function figsizer(gcf, gca)
+
+    fig = gcf;
+    fig.Units = 'pixels';
+    fig.Position(3:4) = [500, 500];
+    g = gca;
+    g.Units = 'pixels';
+    g.Position(1:2) = 10;
+    g.Position(3:4) = 480; %= [0, 0, 500, 500];
+
+end
