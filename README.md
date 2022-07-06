@@ -13,7 +13,6 @@ This repo contains the code I use to extract and visualise data collected using 
   * Tidy this and comment
 * In the whole bead element-element plots, distinguish the points and beads
   * Attempted labelling, but looks messy and confusing - there may be a better way?
-  * Added a legend with the markers. 
   * Need to find a way to show progression. Change the colour bar? Add an arrow?
 
 
