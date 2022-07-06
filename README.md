@@ -11,6 +11,7 @@ This repo contains the code I use to extract and visualise data collected using 
 * Define Regions of Interest (ROIs)
   * What to base this on? Can I do it using the movies? Maybe stacked heatmaps?
   * Select on an image, create ROIs. Do this for the individual chunks. Try on a couple of pieces first.
+  * Export ROI vertex points to a text file, so that you only have to select the ROI once.
 * In the whole bead element-element plots, distinguish the points and beads
   * Attempted labelling, but looks messy and confusing - there may be a better way?
   * Added a legend with the markers. 
@@ -38,5 +39,9 @@ This is used to create movies of counts over time, to show spatial and temporal 
 ### 5. [Plotting Functions](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Plotting_Functions)
 
 The files in Plotting Functions are called by the other scripts, and used to create consistent plots.
+
+### 6. [ROI](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/ROI) 
+
+Used to define ROIs (Regions of Interest) in the NanoSIMS images.
 
 
