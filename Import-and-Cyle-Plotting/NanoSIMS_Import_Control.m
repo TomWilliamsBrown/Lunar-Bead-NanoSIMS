@@ -51,14 +51,10 @@ electron_normalise = 1;
 %%%%%% Don't routinely modify anything below here.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Add file name
-
-list_of_im_files = strcat(bead_names, '.im');
-
 % Create a list, to allow entry into arrayfun
 
-Figure_directorynamelist = repmat(Figure_directoryname, 1, length(list_of_im_files));
-Excel_directorynamelist = repmat(Excel_directoryname, 1, length(list_of_im_files));
+Figure_directorynamelist = repmat(Figure_directoryname, 1, length(bead_names));
+Excel_directorynamelist = repmat(Excel_directoryname, 1, length(bead_names));
 
 % Get somewhere to save the plots
 
@@ -69,29 +65,29 @@ Excel_directorynamelist = repmat(Excel_directoryname, 1, length(list_of_im_files
 % Need as an array to input into arrayfun
 
 if savecountplots
-    saveplots = ones(1, length(list_of_im_files)); %This will result in plots being saved
+    saveplots = ones(1, length(bead_names)); %This will result in plots being saved
 else
-    saveplots = zeros(1, length(list_of_im_files)); %This will result in plots NOT being saved
+    saveplots = zeros(1, length(bead_names)); %This will result in plots NOT being saved
 end
 
 if save_excels
-    saveexcel = ones(1, length(list_of_im_files)); %This will result in Excels being saved
+    saveexcel = ones(1, length(bead_names)); %This will result in Excels being saved
 else
-    saveexcel = zeros(1, length(list_of_im_files)); %This will result in Excels NOT being saved
+    saveexcel = zeros(1, length(bead_names)); %This will result in Excels NOT being saved
 end
 
 %% Here we reate double arrays for normalising/not notmalising by electron counts
 
 if electron_normalise
 
-    enormalise = ones(1, length(list_of_im_files));
+    enormalise = ones(1, length(bead_names));
 else
-    enormalise = zeros(1, length(list_of_im_files));
+    enormalise = zeros(1, length(bead_names));
 end
 
 %% Now run NanoSIMSImportFunction on all of the .im files
 
-arrayfun(@NanoSIMSImportFunction, list_of_im_files, Figure_directorynamelist, Excel_directorynamelist, enormalise, saveplots, saveexcel)
+arrayfun(@NanoSIMSImportFunction, bead_names, Figure_directorynamelist, Excel_directorynamelist, enormalise, saveplots, saveexcel)
 
 %% Print the finish message once complete
 
