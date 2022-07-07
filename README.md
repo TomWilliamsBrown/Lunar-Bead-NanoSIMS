@@ -17,10 +17,10 @@ This repo contains the code I use to extract and visualise data collected using 
   * __Add scalebar__ Need this to better decide heatmaps and ROIs!
   * Maybe try making multiple PNGs, then flipping through them (with a PNG file per frame)
 * Define Regions of Interest (ROIs)
+  * Rework bootstrapping
   * Try with edge/gradient detection.
   * Save ROI counts and stds to excel file
   * Expand to all the elements
-  * Tidy this and comment
   * Annotated plots? Show the area and a plot next to it.
 * In the whole bead element-element plots, distinguish the points and beads
   * Attempted labelling, but looks messy and confusing - there may be a better way? Try different colour for each one, with an arrow showing direction.
