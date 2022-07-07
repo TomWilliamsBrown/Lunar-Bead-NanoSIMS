@@ -15,8 +15,8 @@ clear;
 
 % [1] Choose which elements you want on the x axis:
 % Total possible = {'F','Cl','Cu','Br','I'}
-%xaxiselements = {'F','Cl','Cu','Br','I'};
-xaxiselements = {'Cl', 'F','Cu','Br','I'};
+xaxiselements = {'F','Cl','Cu','Br','I'};
+%xaxiselements = {'Cl'};
 
 % [2] Where the excel files with the count data are saved:
 directoryname = {'Excel Files electron'};
@@ -29,7 +29,7 @@ directoryname = {'Excel Files electron'};
     'LunarBeadJ_1', 'LunarBeadJ_2', 'LunarBeadJ_3'};
 
 % [4] Where to save the results:
-elementelementdirectoryname = {'Individual Element-Element Plots'};
+elementelementsavefolder = 'Individual Element-Element Plots';
 
 % [5] Save plots? 1 for yes, 0 for no
 SavePlots_YN = 1;
@@ -39,27 +39,30 @@ SavePlots_YN = 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%% Don't routinely modify anything below this line!
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+fullelementelementsavefolder = ['Element-Element-Plotting/',elementelementsavefolder];
+
 %% Check if the directory already exists
 % If it does, ask if you want to delete the contents.
 % If yes, delete the contents
 
-if isfolder(elementelementdirectoryname)
+if isfolder(fullelementelementsavefolder)
 
-    prompt = (['The following folder already exists: ', char(elementelementdirectoryname), '\n', 'Press any key to continue and delete contents']);
+    prompt = (['The following folder already exists: ', fullelementelementsavefolder, '\n', 'Press any key to continue and delete contents']);
     input(prompt)
 
     % Delete contents if it already exists
 
     % Get a list of all files in the folder
-    filePattern = fullfile(char(elementelementdirectoryname));
+    filePattern = fullfile(['Element-Element-Plotting/', fullelementelementsavefolder]);
     % Then delete the ones with a .png extension:
-    delete([filePattern, '/*.png'])
+    delete([filePattern, '/*.png']);
     % Say that they've been deleted
-    fprintf('Files Deleted. Starting figure creation. \n')
+    fprintf('Files Deleted. Starting figure creation. \n');
 
 else %If it doesn't already exist, make it!:
 
-    [status, msg, msgID] = mkdir(char(elementelementdirectoryname));
+    [status, msg, msgID] = mkdir(['Element-Element-Plotting/',fullelementelementsavefolder]);
+    fprintf('Save Folder Created \n');
 
 end
 
@@ -73,7 +76,7 @@ end
 
 numfiles = numel(Excel_files); % Find number of files
 
-elementelementdirectorynamelist = repmat(elementelementdirectoryname, 1, numfiles);
+elementelementdirectorynamelist = repmat({fullelementelementsavefolder}, 1, numfiles);
 directorynamelist = repmat(directoryname, 1, numfiles);
 
 %% Use the input to SavePlots_YN to create an array of 1s/0s for saving/not saving
