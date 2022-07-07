@@ -20,10 +20,10 @@
 % to 1.
 
 
-list_of_im_files = {'LunarBeadE_1.im', ...
-    'LunarBeadH_1.im', 'LunarBeadH_2.im', 'LunarBeadH_3.im', 'LunarBeadH_4.im', ...
-    'LunarBeadI_1.im', 'LunarBeadI_2.im', 'LunarBeadI_3.im', ...
-    'LunarBeadJ_1.im', 'LunarBeadJ_2.im', 'LunarBeadJ_3.im'};
+bead_names = {'LunarBeadE_1', ...
+    'LunarBeadH_1', 'LunarBeadH_2', 'LunarBeadH_3', 'LunarBeadH_4', ...
+    'LunarBeadI_1', 'LunarBeadI_2', 'LunarBeadI_3', ...
+    'LunarBeadJ_1', 'LunarBeadJ_2', 'LunarBeadJ_3'};
 
 
 %list_of_im_files = {'LunarBeadE_1.im'};
@@ -49,6 +49,10 @@ electron_normalise = 1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% Don't routinely modify anything below here.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Add file name
+
+list_of_im_files = strcat(bead_names, '.im');
 
 % Create a list, to allow entry into arrayfun
 
