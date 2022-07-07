@@ -6,6 +6,8 @@ This repo contains the code I use to extract and visualise data collected using 
 
 ## To Do:
 
+* GUI?
+* Reorganise Importing and ROI stuff. Make it more coherent.
 * __IDEA__ 3x2 plots, with a subplot every 10 frames. Solves visualising an unwieldly number of images.
 * Histograms
   * Show if bimodal distribution
