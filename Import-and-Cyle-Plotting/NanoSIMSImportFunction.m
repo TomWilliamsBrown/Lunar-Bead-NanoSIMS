@@ -16,26 +16,17 @@ close all;
 %% Read the NanoSIMS Image
 %--------------------------------------------------------------------------
 
-% Specify the sample you want:
-
-fnames = {filename};
-fname = fnames{1};
-
-% Now get the file (stored in the folder)
-
-filefindernames = {['im files/', fname]};
-filefindername = filefindernames{1};
-
-[~, fname_] = fileparts(fname);
+% Get the path of the .im file you want
+imfilepath = ['im files/', filename];
 
 % This line calls readNanoSIMSimage to get the header data
 % (e.g. mass names, masses, analysis times, etc.)
-[~, header_data] = readNanoSIMSimage(filefindername);
+[~, header_data] = readNanoSIMSimage(imfilepath);
 
 % This line calls read_im_file_ro to get the image data.
 % i.e. the counts in every pixel in every cycle for all of the masses
 % analysed
-[image_data, ~, ~] = read_im_file_ro(filefindername);
+[image_data, ~, ~] = read_im_file_ro(imfilepath);
 
 %% Generate variables from the data and headers read above
 %--------------------------------------------------------------------------
@@ -159,7 +150,7 @@ I_ = nan(ntrials, ncycles);
 
 nInner = sum(sum(innerpixels)); %Number of inner pixels
 iInner = find(innerpixels); % Creates a vector of the index of all the pixels that are true in R
-% (so not the ones that are zero around the edges)
+% (so not the ones that are zero around the edges). Linear indexing.
 
 % Take ntrials repeated samples with replacement from the dataset:
 %This is the slowest part of the code! Speed it up?
@@ -215,7 +206,7 @@ I_std = std(I_, 1);
 %--------------------------------------------------------------------------
 
 % Get the name of the bead
-beadlabel = fname(1:end-3);
+beadlabel = filename(1:end-3);
 beadlabel = replace(beadlabel, '_', '');
 beadlabel = replace(beadlabel, 'LunarBead', 'Lunar Bead ');
 
@@ -243,7 +234,7 @@ errorplotterfunction(Ibycycle, I_std, '#AA4499', 'I', ncycles, beadlabel)
 
 if saveplots
 
-    saveas(gca, [Figure_directoryname, '/', fname_, '.png']);
+    saveas(gca, [Figure_directoryname, '/', filename, '.png']);
 
 end
 
@@ -261,7 +252,7 @@ if saveexcel
         'VariableNames', {'F_counts', 'F_std', 'Cl_counts', 'Cl_std', ...
         'Cu_counts', 'Cu_std', 'Br_counts', 'Br_std', 'I_counts', 'I_std'});
 
-    writetable(countsbycycletable, [Excel_directoryname, '/', fname_, '.xlsx']);
+    writetable(countsbycycletable, [Excel_directoryname, '/', filename, '.xlsx']);
 
 
 end
