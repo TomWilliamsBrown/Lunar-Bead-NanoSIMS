@@ -3,6 +3,10 @@
 clear;
 close all;
 
+% This matlab file
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Parameters
 
 lunarbead = 'LunarBeadH_1';
@@ -10,6 +14,8 @@ lunarbead = 'LunarBeadH_1';
 exceloutputfolder = 'TEST2ROI_excels';
 
 electron_normalise = 1;
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -54,6 +60,7 @@ countingtimes = cell2mat(header_data.Tab_mass.countingtime);
 
 % Get the number of pixels and cycles
 ncycles = size(image_data, 3);
+npixels = size(image_data, 1); %Assumes square
 
 %% Get counts for each pixel in a 256x256 image over all cycles (256x256x50 matrix)
 %--------------------------------------------------------------------------
@@ -149,26 +156,41 @@ Cu_ = nan(ntrials, ncycles);
 Br_ = nan(ntrials, ncycles);
 I_ = nan(ntrials, ncycles);
 
-npixels = numel(X_inROI); %Number of pixels
 
-for ii = 1:ntrials %Parallel version
+ for ii = 1:ntrials %Parallel version
 
-    % Randomly sample pixels within the ROI
-    RandomIndex = randsample(npixels, npixels, true);
-    RandomIndexLinear = plinear(RandomIndex);
-    %%%%%%%%%% NO THIS RANDOMLY SAMPLES FROM EVERYWHERE!!!!!!!!!!!!!!!
-    %!!!!!
-    %!!!!!
-    %!!!!!
+     % Random sampling of nInner number of samples
+     % for values up to nInner (number of pixels)
 
-    for jj = 1:ncycles
+     randpixels = randsample(npixels, npixels, true);
+     randpixelsindex = plinear(randpixels);
 
-        Cl_boot = Clcount_pixels(:, :, jj);
-        Cl_(ii, jj) = sum(Cl_boot(RandomIndexLinear));
+     for jj = 1:ncycles
 
-    end
+         % Sequential Memory Access! Instead
 
-end
+         Cl_boot = Clcount_pixels(:, :, jj);
+         Cl_(ii, jj) = sum(Cl_boot(randpixelsindex));
+
+     end
+
+ end
+
+% for ii = 1:ntrials %Parallel version
+% 
+%     % Randomly sample pixels within the ROI
+%     RandomIndex = randsample(npixels, true);
+%     %%%%%%%%%% NO THIS RANDOMLY SAMPLES FROM EVERYWHERE!!!!!!!!!!!!!!!
+%
+%     % Or do I use the same standard error as for the whole site??
+%     for jj = 1:ncycles
+% 
+%         Cl_boot = Clcount_pixels(:, :, jj);
+%         Cl_(ii, jj) = sum(Cl_boot(RandomIndex));
+% 
+%     end
+% 
+% end
 
 Cl_std = std(Cl_, 1);
 
@@ -180,6 +202,7 @@ errorplotterfunction(Clbycycle, Cl_std, '#88CCEE', 'Cl', ncycles, 'Cl ROI')
 
 %% Function to size the outut figure
 %--------------------------------------------------------------------------
+
 function figsizer(gcf, gca)
 
 fig = gcf;
@@ -188,7 +211,7 @@ fig.Position(3:4) = [500, 500];
 g = gca;
 g.Units = 'pixels';
 g.Position(1:2) = 10;
-g.Position(3:4) = 480; %= [0, 0, 500, 500];
+g.Position(3:4) = 480;
 
 end
 
