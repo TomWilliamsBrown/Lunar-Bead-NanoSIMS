@@ -7,7 +7,7 @@ close all;
 
 lunarbead = 'LunarBeadH_1';
 
-exceloutputfolder = 'ROI_excels';
+exceloutputfolder = 'TEST2ROI_excels';
 
 electron_normalise = 1;
 
@@ -16,30 +16,34 @@ electron_normalise = 1;
 %%%%%% Don't routinely modify anything below here.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-imfile = ['im files/',lunarbead,'.im'];
-pngfile = ['ROI Plotter/FirstFrame/',lunarbead,'.png'];
+%% Get the paths of the im file you are importing, and the png file you are
+% creating and exporting
+%--------------------------------------------------------------------------
+imfilepath = ['im files/', lunarbead, '.im'];
+pngfilename = ['ROI/FirstFrame/', lunarbead, '.png'];
 
 %% Create folder to store the excels
+%--------------------------------------------------------------------------
 
-if ~isfolder(exceloutputfolder)    
-    [~, ~, ~] = mkdir(char(exceloutputfolder));    
-else   
+if ~isfolder(exceloutputfolder)
+    [~, ~, ~] = mkdir(char(exceloutputfolder));
+else
     fprintf('Already a folder \n')
 end
 
-%% Get the data
+%% Get the data from the im file
 %--------------------------------------------------------------------------
 
 % This line calls readNanoSIMSimage to get the header data
 % (e.g. mass names, masses, analysis times, etc.)
-[~, header_data] = readNanoSIMSimage(imfile);
+[~, header_data] = readNanoSIMSimage(imfilepath);
 
 % This line calls read_im_file_ro to get the image data.
 % i.e. the counts in every pixel in every cycle for all of the masses
 % analysed
-[image_data, ~, ~] = read_im_file_ro(imfile);
+[image_data, ~, ~] = read_im_file_ro(imfilepath);
 
-%% Generate variables from the data and headers read above
+%% Generate variables from the data and headers read from the im file
 %--------------------------------------------------------------------------
 
 %mass_amu: {[18.9708]  [36.9949]  [63.0276]  [79.0000]  [127.0000]  [0]}
@@ -73,15 +77,16 @@ Cucount_pixels = Cucount_pixels .* normalised_ecount_pixels;
 Brcount_pixels = Brcount_pixels .* normalised_ecount_pixels;
 Icount_pixels = Icount_pixels .* normalised_ecount_pixels;
 
-%% Import the ROI file
+%% Import the ROI (Region of Interest) file
+% This stores the x and y positions of the vertices of the ROI shape
 %--------------------------------------------------------------------------
 
-ROI_T = readtable(['ROI Plotter/H1_ROIs/', 'LunarBeadH_1_red1.txt']);
+ROI_T = readtable(['ROI/H1_ROIs/', 'LunarBeadH_1_red1.txt']);
 
 ROIX = ROI_T.X;
 ROIY = ROI_T.Y;
 
-%% Only get data from inside the ROI
+%% Slice out counts from inside the ROI
 %--------------------------------------------------------------------------
 
 % Make a mesh to get coordinates
@@ -94,38 +99,42 @@ maxx = size(Fcount_pixels, 1);
 [in, on] = inpolygon(Xmesh, Ymesh, ROIX, ROIY);
 
 X_inROI = Xmesh(in);
-
-
 Y_inROI = Ymesh(in);
 
+%% Create a figure showing the image with the ROI overlain
+% This is done to confirm you have the right ROI
+%--------------------------------------------------------------------------
+
 figure()
-I = imread(pngfile);
+I = imread(pngfilename);
 figsizer(gcf, gca)
 hold on
 imshow(I)
 hold on
-plot(X_inROI, Y_inROI, 'r+')
+plot(X_inROI, Y_inROI, 'r+') % Plot the pixels within the ROI
 hold off
 
-% Get the count data at these coordinates
-%n = 1:ncycles;
-%A = zeros(maxx,maxy,ncycles);
-ROI_counts = zeros(numel(X_inROI), ncycles);
-
-%% Get the linear index of the ROI Pixels
-
-plinear = sub2ind(size(Clcount_pixels(:,:,1)), X_inROI, Y_inROI);
-
-for i = 1:ncycles
-A = Clcount_pixels(:,:,i);
-ROI_counts(:,i) = A(plinear);
-end
-
-%% Get counts in each cycle
+%% Extract the counts for pixels located within the ROI
 %--------------------------------------------------------------------------
 
-Clbycycle = sum(ROI_counts);
+% Get the linear index of the pixels within the ROI. These are used to
+% locate pixels within the ROI
+plinear = sub2ind(size(Clcount_pixels(:, :, 1)), X_inROI, Y_inROI);
 
+% Preallocate an matrix for counts within the ROI (counts_in_ROI)
+counts_in_ROI = zeros(numel(X_inROI), ncycles);
+
+% Populate the counts_in_ROI matrix with the count data from within the ROI
+% by slicing out the pixels within the ROI using their linear index
+for i = 1:ncycles
+    A = Clcount_pixels(:, :, i);
+    counts_in_ROI(:, i) = A(plinear);
+end
+
+%% Sum the total number of counts in each cycle
+%--------------------------------------------------------------------------
+
+Clbycycle = sum(counts_in_ROI);
 
 %% Bootstrap to find error
 %--------------------------------------------------------------------------
@@ -140,23 +149,22 @@ Cu_ = nan(ntrials, ncycles);
 Br_ = nan(ntrials, ncycles);
 I_ = nan(ntrials, ncycles);
 
-nInner = numel(X_inROI); %Number of pixels
-iInner = plinear; % linear index of the ROI pixels
+npixels = numel(X_inROI); %Number of pixels
 
 for ii = 1:ntrials %Parallel version
 
-    % Random sampling of nInner number of samples
-    % for values up to nInner (number of pixels)
-
-    iiR = randsample(nInner, nInner, true);
-    iinnerR = iInner(iiR);
+    % Randomly sample pixels within the ROI
+    RandomIndex = randsample(npixels, npixels, true);
+    RandomIndexLinear = plinear(RandomIndex);
+    %%%%%%%%%% NO THIS RANDOMLY SAMPLES FROM EVERYWHERE!!!!!!!!!!!!!!!
+    %!!!!!
+    %!!!!!
+    %!!!!!
 
     for jj = 1:ncycles
 
-        % Sequential Memory Access! Instead
-
         Cl_boot = Clcount_pixels(:, :, jj);
-        Cl_(ii, jj) = sum(Cl_boot(iinnerR));
+        Cl_(ii, jj) = sum(Cl_boot(RandomIndexLinear));
 
     end
 
@@ -170,20 +178,19 @@ Cl_std = std(Cl_, 1);
 figure()
 errorplotterfunction(Clbycycle, Cl_std, '#88CCEE', 'Cl', ncycles, 'Cl ROI')
 
-
-
 %% Function to size the outut figure
 %--------------------------------------------------------------------------
 function figsizer(gcf, gca)
 
-    fig = gcf;
-    fig.Units = 'pixels';
-    fig.Position(3:4) = [500, 500];
-    g = gca;
-    g.Units = 'pixels';
-    g.Position(1:2) = 10;
-    g.Position(3:4) = 480; %= [0, 0, 500, 500];
+fig = gcf;
+fig.Units = 'pixels';
+fig.Position(3:4) = [500, 500];
+g = gca;
+g.Units = 'pixels';
+g.Position(1:2) = 10;
+g.Position(3:4) = 480; %= [0, 0, 500, 500];
 
 end
 
-
+%% Export to Text File
+%--------------------------------------------------------------------------
