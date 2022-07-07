@@ -17,7 +17,7 @@ close all;
 %--------------------------------------------------------------------------
 
 % Get the path of the .im file you want
-imfilepath = ['im files/', filename];
+imfilepath = ['im files/', filename, '.im'];
 
 % This line calls readNanoSIMSimage to get the header data
 % (e.g. mass names, masses, analysis times, etc.)
