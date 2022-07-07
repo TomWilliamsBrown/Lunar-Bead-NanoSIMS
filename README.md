@@ -6,9 +6,13 @@ This repo contains the code I use to extract and visualise data collected using 
 
 ## To Do:
 
+* Histograms
+  * Show if bimodal distribution
+* Image Registration
 * Work on movie plotting
   * __Add scalebar__ Need this to better decide heatmaps and ROIs!
 * Define Regions of Interest (ROIs)
+  * Try with edge/gradient detection.
   * Save ROI counts and stds to excel file
   * Expand to all the elements
   * Tidy this and comment
