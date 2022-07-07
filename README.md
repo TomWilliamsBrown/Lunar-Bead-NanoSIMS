@@ -6,11 +6,13 @@ This repo contains the code I use to extract and visualise data collected using 
 
 ## To Do:
 
+* __IDEA__ 3x2 plots, with a subplot every 10 frames. Solves visualising an unwieldly number of images.
 * Histograms
   * Show if bimodal distribution
 * Image Registration
 * Work on movie plotting
   * __Add scalebar__ Need this to better decide heatmaps and ROIs!
+  * Maybe try making multiple PNGs, then flipping through them (with a PNG file per frame)
 * Define Regions of Interest (ROIs)
   * Try with edge/gradient detection.
   * Save ROI counts and stds to excel file
