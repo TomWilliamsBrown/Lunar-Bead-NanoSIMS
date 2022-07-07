@@ -51,4 +51,8 @@ The files in Plotting Functions are called by the other scripts, and used to cre
 
 Used to define ROIs (Regions of Interest) in the NanoSIMS images.
 
+### 7. [Histograms](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Histograms)
+
+Plot histogram of counts at each site
+
 
