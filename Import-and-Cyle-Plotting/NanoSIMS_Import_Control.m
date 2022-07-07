@@ -20,18 +20,19 @@
 % to 1.
 
 
-bead_names = {'LunarBeadE_1', ...
-    'LunarBeadH_1', 'LunarBeadH_2', 'LunarBeadH_3', 'LunarBeadH_4', ...
-    'LunarBeadI_1', 'LunarBeadI_2', 'LunarBeadI_3', ...
-    'LunarBeadJ_1', 'LunarBeadJ_2', 'LunarBeadJ_3'};
+% bead_names = {'LunarBeadE_1', ...
+%     'LunarBeadH_1', 'LunarBeadH_2', 'LunarBeadH_3', 'LunarBeadH_4', ...
+%     'LunarBeadI_1', 'LunarBeadI_2', 'LunarBeadI_3', ...
+%     'LunarBeadJ_1', 'LunarBeadJ_2', 'LunarBeadJ_3'};
 
+bead_names = {'LunarBeadE_1'};
 
 %list_of_im_files = {'LunarBeadE_1.im'};
 
 % Directory name where figures and excel documents are saved:
 
-Figure_directoryname = {'Cycle-Element Figures electron'};
-Excel_directoryname = {'Excel Files electron'};
+Figure_directoryname = {'TESTCycle-Element Figures electron'};
+Excel_directoryname = {'TESTExcel Files electron'};
 
 % save count-cycle plots?
 
@@ -95,4 +96,5 @@ arrayfun(@NanoSIMSImportFunction, list_of_im_files, Figure_directorynamelist, Ex
 %% Print the finish message once complete
 
 lastslash_pos = find(mfilename('fullpath') == '/', 1, 'last');
-fprintf(['Finished running ', extractAfter(mfilename('fullpath'), lastslash_pos)])
+fprintf(['Finished running ', extractAfter(mfilename('fullpath'), lastslash_pos)], '\n');
+fprintf('\n');
