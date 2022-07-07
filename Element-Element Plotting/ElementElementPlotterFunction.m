@@ -1,4 +1,4 @@
-function ElementElementPlotterFunction(Excel_file, directoryname, elementelementdirectoryname, saveplots, xaxiselement, counter, max_counter)
+function ElementElementPlotterFunction(Excel_file, directoryname, elementelementsavefolder, saveplots, xaxiselement, counter, max_counter)
 %
 % This function plots element counts of one element on the x axis against
 % element counts of the other elements on the y axis.
@@ -24,15 +24,19 @@ tStart = tic;
 
 close all;
 
+%% Convert to character arrays
+%--------------------------------------------------------------------------
 xaxiselement = char(xaxiselement);
+directoryname = char(directoryname);
+Excel_file = char(Excel_file);
 
 %% Read the Excel file every analysis
 
-T = readtable([char(directoryname), '/', char(Excel_file), '.xlsx'], 'VariableNamingRule', 'preserve');
+T = readtable([directoryname, '/', Excel_file, '.xlsx'], 'VariableNamingRule', 'preserve');
 
-elementelementplots(T, elementelementdirectoryname, Excel_file, saveplots, xaxiselement)
+elementelementplots(T, elementelementsavefolder, Excel_file, saveplots, xaxiselement)
 
-    function elementelementplots(T, elementelementdirectoryname, Excel_file, saveplots, xaxiselement)
+    function elementelementplots(T, elementelementsavefolder, Excel_file, saveplots, xaxiselement)
         %When called, this function actually produces each individual element-element plot
 
         if strcmp(xaxiselement, 'F')
@@ -151,10 +155,13 @@ elementelementplots(T, elementelementdirectoryname, Excel_file, saveplots, xaxis
 
         num_layers = length(T.Br_counts);
 
-        % Labelling
-
+        %% Labelling
+        %------------------------------------------------------------------
         numbers = [(1:num_layers)]'; %#ok<NBRAK>
         labels = num2cell(num2str(numbers));
+        
+        %numbers = 1:num_layers;
+        slicednumbers = [(1:3:num_layers)]';
 
         % Colours
 
@@ -172,7 +179,7 @@ elementelementplots(T, elementelementdirectoryname, Excel_file, saveplots, xaxis
         for i = 1:num_layers
             errorbar(xaxis(i), yaxis1(i), yaxiserror1(i), yaxiserror1(i), xaxiserror(i), xaxiserror(i), '.', 'Color', colours(i, :));
         end
-        labelpoints(xaxis, yaxis1, labels, 'Color', colours);
+        labelpoints(xaxis(slicednumbers), yaxis1(slicednumbers), labels(slicednumbers,:), 'Color', colours(slicednumbers,:));
         hold off
         xlabel([xaxiselement, ' Counts'])
         ylabel([yaxiselement1, ' Counts'])
@@ -182,7 +189,7 @@ elementelementplots(T, elementelementdirectoryname, Excel_file, saveplots, xaxis
         for i = 1:num_layers
             errorbar(xaxis(i), yaxis2(i), yaxiserror2(i), yaxiserror2(i), xaxiserror(i), xaxiserror(i), '.', 'Color', colours(i, :));
         end
-        labelpoints(xaxis, yaxis2, labels, 'Color', colours);
+        labelpoints(xaxis(slicednumbers), yaxis2(slicednumbers), labels(slicednumbers,:), 'Color', colours(slicednumbers,:));
         hold off
         xlabel([xaxiselement, ' Counts'])
         ylabel([yaxiselement2, ' Counts'])
@@ -192,7 +199,7 @@ elementelementplots(T, elementelementdirectoryname, Excel_file, saveplots, xaxis
         for i = 1:num_layers
             errorbar(xaxis(i), yaxis3(i), yaxiserror3(i), yaxiserror3(i), xaxiserror(i), xaxiserror(i), '.', 'Color', colours(i, :));
         end
-        labelpoints(xaxis, yaxis3, labels, 'Color', colours);
+        labelpoints(xaxis(slicednumbers), yaxis3(slicednumbers), labels(slicednumbers,:), 'Color', colours(slicednumbers,:));
         hold off
         xlabel([xaxiselement, ' Counts'])
         ylabel([yaxiselement3, ' Counts'])
@@ -202,7 +209,7 @@ elementelementplots(T, elementelementdirectoryname, Excel_file, saveplots, xaxis
         for i = 1:num_layers
             errorbar(xaxis(i), yaxis4(i), yaxiserror4(i), yaxiserror4(i), xaxiserror(i), xaxiserror(i), '.', 'Color', colours(i, :));
         end
-        labelpoints(xaxis, yaxis4, labels, 'Color', colours);
+        labelpoints(xaxis(slicednumbers), yaxis4(slicednumbers), labels(slicednumbers,:), 'Color', colours(slicednumbers,:));
         hold off
         xlabel([xaxiselement, ' Counts'])
         ylabel([yaxiselement4, ' Counts'])
@@ -212,13 +219,13 @@ elementelementplots(T, elementelementdirectoryname, Excel_file, saveplots, xaxis
         colours = gcf;
         colours.Position(3:4) = [1000, 500];
 
-        % shg % Show Figure
+        %shg % Show Figure
 
         %% Save Plots
 
         if saveplots
 
-            saveas(gca, [char(elementelementdirectoryname), '/', char(Excel_file), '_', xaxiselement, '.png']);
+            saveas(gca, ['Element-Element-Plotting/', char(elementelementsavefolder), '/', char(Excel_file), '_', xaxiselement, '.png']);
 
         end
 
