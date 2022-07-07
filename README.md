@@ -21,7 +21,7 @@ This repo contains the code I use to extract and visualise data collected using 
   * Tidy this and comment
   * Annotated plots? Show the area and a plot next to it.
 * In the whole bead element-element plots, distinguish the points and beads
-  * Attempted labelling, but looks messy and confusing - there may be a better way?
+  * Attempted labelling, but looks messy and confusing - there may be a better way? Try different colour for each one, with an arrow showing direction.
   * Need to find a way to show progression. Change the colour bar? Add an arrow?
 
 
