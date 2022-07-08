@@ -6,11 +6,12 @@ This repo contains the code I use to extract and visualise data collected using 
 
 ## To Do:
 
+* Organisation: Combine movies and image subplots into a more coherent folder.
 * GUI?
 * Reorganise Importing and ROI stuff. Make it more coherent.
 * Histograms
   * Show if bimodal distribution
-  * So far its absically just showing most are zero. Need to think about how to plot.
+  * So far its basically just showing most are zero. Need to think about how to plot.
 * Image Registration
 * Work on movie plotting
   * __Add scalebar__ Need this to better decide heatmaps and ROIs!
@@ -22,7 +23,6 @@ This repo contains the code I use to extract and visualise data collected using 
   * Expand to all the elements
   * Annotated plots? Show the area and a plot next to it.
 * In the whole bead element-element plots, distinguish the points and beads
-  * Attempted labelling, but looks messy and confusing - there may be a better way? Try different colour for each one, with an arrow showing direction.
   * Need to find a way to show progression. Change the colour bar? Add an arrow?
 
 
@@ -55,5 +55,9 @@ Used to define ROIs (Regions of Interest) in the NanoSIMS images.
 ### 7. [Histograms](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Histograms)
 
 Plot histogram of counts at each site
+
+### 8. [Image SubPlots](https://github.com/TomWilliamsBrown/Lunar-Bead-NanoSIMS/tree/main/Image%20SubPlots)
+
+Plots a colormap every 10 cycles. 
 
 
