@@ -1,17 +1,24 @@
 %% Image Subplots
 
-clear;
+clear all;
 close all;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Parameters
 
-lunarbead = 'LunarBeadH_1';
+%lunarbead = 'LunarBeadH_1';
 
-plotoutputfolder = 'ImageSubplotOutputs';
+lunarbeads = {'LunarBeadE_1', ...
+    'LunarBeadH_1', 'LunarBeadH_2', 'LunarBeadH_3', 'LunarBeadH_4', ...
+    'LunarBeadI_1', 'LunarBeadI_2', 'LunarBeadI_3', ...
+    'LunarBeadJ_1', 'LunarBeadJ_2', 'LunarBeadJ_3'};
 
-electron_normalise = 1;
+%lunarbeads = {'LunarBeadE_1'};
+
+plotoutputfolder = 'TESTImageSubplotOutputs';
+
+speciestoplot = {'Cl', 'F', 'Cu', 'Br', 'I', 'e'};
 
 saveplots = 1;
 
@@ -20,20 +27,73 @@ saveplots = 1;
 %%%%%% Don't routinely modify anything below here.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% Create folder to store the output
+%--------------------------------------------------------------------------
+
+if ~isfolder(plotoutputfolder)
+    [~, ~, ~] = mkdir(plotoutputfolder);
+else
+    fprintf('Already a folder. Deleting Contents \n')
+
+end
+
+%% Name folders for each species 
+
+Ffolder = [plotoutputfolder, '/F'];
+Clfolder = [plotoutputfolder, '/Cl'];
+Cufolder = [plotoutputfolder, '/Cu'];
+Brfolder = [plotoutputfolder, '/Br'];
+Ifolder = [plotoutputfolder, '/I'];
+efolder = [plotoutputfolder, '/e'];
+
+%% Delete Contents if it already exists
+
+delete([Ffolder, '/*.png'])
+delete([Clfolder, '/*.png'])
+delete([Cufolder, '/*.png'])
+delete([Brfolder, '/*.png'])
+delete([Ifolder, '/*.png'])
+delete([efolder, '/*.png'])
+
+fprintf('Deleted \n');
+ 
+%% Create folders for each species 
+if ~isfolder(Ffolder)
+    [~, ~, ~] = mkdir(Ffolder);
+end
+if ~isfolder(Clfolder)  
+    [~, ~, ~] = mkdir(Clfolder);
+end
+if ~isfolder(Cufolder) 
+    [~, ~, ~] = mkdir(Cufolder);
+end
+if ~isfolder(Brfolder)  
+    [~, ~, ~] = mkdir(Brfolder);
+end
+if ~isfolder(Ifolder)   
+    [~, ~, ~] = mkdir(Ifolder);
+end
+if ~isfolder(efolder)   
+    [~, ~, ~] = mkdir(efolder);
+end
+
+%% Stop figures from appearing
+%--------------------------------------------------------------------------
+
+set(groot, 'defaultFigureVisible', 'off')
+
+%--------------------------------------------------------------------------
+
+for i = 1:numel(lunarbeads)
+    
+lunarbead = char(lunarbeads(i));
+
 %% Get the paths of the im file you are importing, and the png file you are
 % creating and exporting
 %--------------------------------------------------------------------------
 imfilepath = ['im files/', lunarbead, '.im'];
 pngfilename = ['ROI/FirstFrame/', lunarbead, '.png'];
 
-%% Create folder to store the output
-%--------------------------------------------------------------------------
-
-if ~isfolder(plotoutputfolder)
-    [~, ~, ~] = mkdir(char(plotoutputfolder));
-else
-    fprintf('Already a folder \n')
-end
 
 
 %% Get the data from the im file
@@ -83,6 +143,11 @@ Cucount_pixelsN = Cucount_pixels .* ecount_pixelsN;
 Brcount_pixelsN = Brcount_pixels .* ecount_pixelsN;
 Icount_pixelsN = Icount_pixels   .* ecount_pixelsN;
 
+%% Choose Species Pixel Maps
+%--------------------------------------------------------------------------
+
+speciespixels = strcat(speciestoplot, 'count_pixelsN');
+
 %% Create colormaps for images
 %--------------------------------------------------------------------------
 
@@ -90,43 +155,68 @@ close all
 
 xwidth = 0.3;
 yheight = 0.3;
-
 buffer = 0.02;
 
-figure()
-% 
-colormap hot
 
-hold on
-colormapsubplot(ecount_pixelsN, 1, 1, xwidth, yheight, buffer)
-colormapsubplot(ecount_pixelsN, 30, 2, xwidth, yheight, buffer)
-colormapsubplot(ecount_pixelsN, 10, 3, xwidth, yheight, buffer)
-colormapsubplot(ecount_pixelsN, 40, 4, xwidth, yheight, buffer)
-colormapsubplot(ecount_pixelsN, 20, 5, xwidth, yheight, buffer)
-colormapsubplot(ecount_pixelsN, 50, 6, xwidth, yheight, buffer)
-cb = colorbar('eastoutside');
-cb.FontSize = 12;
-%cb.FontWeight = 'bold';
-cb.Label.String = 'Counts per Pixel';
-cb.Position(1) = cb.Position(1) + 1e-1;
-cb.Position(4) = cb.Position(4) * 3 + 2*buffer;
-hold off
-shg
-
-%% Save the plots
-%--------------------------------------------------------------------------
-
-if saveplots
-    
-    
-    saveas(gca, [char(plotoutputfolder), '/', char(lunarbead),...
-            ' image subplots', '.png']);
-    
-    
+if sum(strcmp(speciestoplot, 'F'))
+    speciesplotter(Fcount_pixelsN, xwidth, yheight, buffer, 'F', Ffolder, lunarbead)
+    shg   
+end
+if sum(strcmp(speciestoplot, 'Cl'))
+    speciesplotter(Clcount_pixelsN, xwidth, yheight, buffer, 'Cl', Clfolder, lunarbead)
+    shg   
+end
+if sum(strcmp(speciestoplot, 'Cu'))
+    speciesplotter(Cucount_pixelsN, xwidth, yheight, buffer, 'Cu', Cufolder, lunarbead)
+    shg   
+end
+if sum(strcmp(speciestoplot, 'Br'))
+    speciesplotter(Brcount_pixelsN, xwidth, yheight, buffer, 'Br', Brfolder, lunarbead)
+    shg   
+end
+if sum(strcmp(speciestoplot, 'I'))
+    speciesplotter(Icount_pixelsN, xwidth, yheight, buffer, 'I', Ifolder, lunarbead)
+    shg   
+end
+if sum(strcmp(speciestoplot, 'e'))
+    speciesplotter(ecount_pixelsN, xwidth, yheight, buffer, 'e', efolder, lunarbead)
+    shg   
 end
 
 
+end
 
+%% Allow figures to appear again
+%--------------------------------------------------------------------------
+
+set(groot, 'defaultFigureVisible', 'on')
+
+%--------------------------------------------------------------------------
+function speciesplotter(speciesmap, xwidth, yheight, buffer, species, plotoutputfolder, lunarbead)
+
+    figure('visible','off')
+    % 
+    colormap hot
+
+    hold on
+    colormapsubplot(speciesmap, 1, 1, xwidth, yheight, buffer)
+    colormapsubplot(speciesmap, 30, 2, xwidth, yheight, buffer)
+    colormapsubplot(speciesmap, 10, 3, xwidth, yheight, buffer)
+    colormapsubplot(speciesmap, 40, 4, xwidth, yheight, buffer)
+    colormapsubplot(speciesmap, 20, 5, xwidth, yheight, buffer)
+    colormapsubplot(speciesmap, 50, 6, xwidth, yheight, buffer)
+    cb = colorbar('eastoutside');
+    cb.FontSize = 12;
+    %cb.FontWeight = 'bold';
+    cb.Label.String = [species, ' Counts per Pixel'];
+    cb.Position(1) = cb.Position(1) + 1e-1;
+    cb.Position(4) = cb.Position(4) * 3 + 2*buffer;
+    hold off
+
+    saveas(gca, [char(plotoutputfolder), '/', char(lunarbead),...
+            '_', species,'_image subplots', '.png']);
+    close all
+end
 
 %--------------------------------------------------------------------------
 function colormapsubplot(pixelmap, cycle, subplotindex, xwidth, yheight, buffer)
