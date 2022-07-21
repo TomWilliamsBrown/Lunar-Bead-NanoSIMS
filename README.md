@@ -24,6 +24,7 @@ This repo contains the code I use to extract and visualise data collected using 
   * Annotated plots? Show the area and a plot next to it.
 * In the whole bead element-element plots, distinguish the points and beads
   * Need to find a way to show progression. Change the colour bar? Add an arrow?
+* Create images, but summed across every cycle (as in L'image) 
 
 
 ## Sections
